@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Claude Opus 4.6 Guide 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0f3460;
+            --highlight: #e94560;
+            --success: #00d9ff;
+            --text: #eaeaea;
+            --text-dim: #a0a0a0;
+            --card-bg: #1f1f38;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 1%;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 1%;
+        }
+
+        /* Header */
+        header {
+            background: var(--gradient-1);
+            padding: 20px 1%;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/></svg>');
+            opacity: 0.1;
+        }
+
+        h1 {
+            font-size: 1.4em;
+            font-weight: 700;
+            text-align: center;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: -0.5px;
+        }
+
+        .version {
+            text-align: center;
+            font-size: 0.75em;
+            opacity: 0.9;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+
+        /* Navigation Tabs */
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            padding: 5px 1%;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            background: var(--card-bg);
+            border: none;
+            color: var(--text-dim);
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8em;
+            font-weight: 600;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .tab.active {
+            background: var(--gradient-3);
+            color: white;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        /* Content Sections */
+        .content {
+            display: none;
+        }
+
+        .content.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .card:active {
+            transform: scale(0.98);
+        }
+
+        .card.feature {
+            border-left-color: var(--success);
+        }
+
+        .card.new {
+            border-left-color: var(--highlight);
+            position: relative;
+        }
+
+        .card.new::after {
+            content: 'NEW';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--gradient-2);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.65em;
+            font-weight: 700;
+        }
+
+        .card h3 {
+            font-size: 1em;
+            margin-bottom: 8px;
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .card p {
+            font-size: 0.85em;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
+
+        .card ul {
+            margin-top: 8px;
+            padding-left: 18px;
+        }
+
+        .card li {
+            font-size: 0.8em;
+            margin-bottom: 5px;
+            color: var(--text);
+        }
+
+        /* How to Use Section */
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            background: var(--card-bg);
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .step-number {
+            background: var(--gradient-1);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85em;
+            flex-shrink: 0;
+            margin-right: 12px;
+        }
+
+        .step-content h4 {
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            color: var(--text);
+        }
+
+        .step-content p {
+            font-size: 0.8em;
+            color: var(--text-dim);
+        }
+
+        /* Code blocks */
+        .code-block {
+            background: var(--secondary);
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.75em;
+        }
+
+        .code-block code {
+            color: var(--success);
+        }
+
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .feature-box {
+            background: var(--gradient-3);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-box:active {
+            transform: scale(0.95);
+        }
+
+        .feature-icon {
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+
+        .feature-box h4 {
+            font-size: 0.8em;
+            margin-bottom: 5px;
+        }
+
+        .feature-box p {
+            font-size: 0.7em;
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px 1%;
+            margin-top: 20px;
+            font-size: 0.75em;
+            color: var(--text-dim);
+            border-top: 1px solid var(--card-bg);
+        }
+
+        /* Accordion */
+        .accordion {
+            margin-bottom: 10px;
+        }
+
+        .accordion-header {
+            background: var(--card-bg);
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+
+        .accordion-header::after {
+            content: '+';
+            font-size: 1.2em;
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-header.active::after {
+            transform: rotate(45deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: var(--secondary);
+            border-radius: 0 0 8px 8px;
+            margin-top: 2px;
+        }
+
+        .accordion-content.active {
+            max-height: 500px;
+            padding: 12px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--gradient-2);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.7em;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 Claude Opus 4.6</h1>
+            <div class="version">Complete Guide 2026 Edition</div>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="overview">Overview</button>
+            <button class="tab" data-tab="features">Features</button>
+            <button class="tab" data-tab="new">What's New</button>
+            <button class="tab" data-tab="howto">How to Use</button>
+            <button class="tab" data-tab="usecases">Use Cases</button>
+            <button class="tab" data-tab="comparison">Compare</button>
+            <button class="tab" data-tab="troubleshoot">Troubleshoot</button>
+            <button class="tab" data-tab="integrations">Integrations</button>
+            <button class="tab" data-tab="tips">Pro Tips</button>
+            <button class="tab" data-tab="advanced">Advanced</button>
+        </div>
+
+        <!-- Overview Tab -->
+        <div class="content active" id="overview">
+            <div class="card">
+                <h3>Welcome to Claude Opus 4.6</h3>
+                <p>The most advanced AI assistant from Anthropic, released in 2026. Claude Opus 4.6 represents a significant leap in AI capabilities with enhanced reasoning, creativity, and multimodal understanding.</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-box">
+                    <div class="feature-icon">🧠</div>
+                    <h4>Advanced Reasoning</h4>
+                    <p>Superior logic & analysis</p>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-icon">💬</div>
+                    <h4>Natural Dialog</h4>
+                    <p>Human-like conversation</p>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-icon">🎨</div>
+                    <h4>Creative Tasks</h4>
+                    <p>Writing & ideation</p>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-icon">📊</div>
+                    <h4>Data Analysis</h4>
+                    <p>Complex insights</p>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 15px;">
+                <h3>Key Specifications</h3>
+                <ul>
+                    <li><strong>Model:</strong> claude-opus-4-6-20260115</li>
+                    <li><strong>Context Window:</strong> 200,000 tokens</li>
+                    <li><strong>Output Limit:</strong> 16,000 tokens</li>
+                    <li><strong>Training Cutoff:</strong> January 2025</li>
+                    <li><strong>Multimodal:</strong> Text, Images, Documents</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Features Tab -->
+        <div class="content" id="features">
+            <div class="card feature">
+                <h3>🔍 Enhanced Web Search</h3>
+                <p>Real-time web access with advanced search capabilities. Get current information, news, and data from across the internet with intelligent result synthesis.</p>
+            </div>
+
+            <div class="card feature">
+                <h3>💻 Code Execution</h3>
+                <p>Run Python code in a sandboxed environment. Perfect for data analysis, calculations, visualizations, and testing algorithms in real-time.</p>
+            </div>
+
+            <div class="card feature">
+                <h3>📄 Artifact Creation</h3>
+                <p>Generate standalone documents, code, websites, and interactive content that you can edit, download, and use immediately.</p>
+            </div>
+
+            <div class="card feature">
+                <h3>🖼️ Vision Capabilities</h3>
+                <p>Analyze images, diagrams, screenshots, and documents. Extract text, understand context, and provide detailed descriptions.</p>
+            </div>
+
+            <div class="card feature">
+                <h3>🗂️ File Processing</h3>
+                <p>Upload and work with PDFs, Word docs, spreadsheets, and more. Extract information, summarize content, and transform data.</p>
+            </div>
+
+            <div class="card feature">
+                <h3>🧮 Advanced Math</h3>
+                <p>Solve complex mathematical problems, perform symbolic computation, and create detailed step-by-step solutions.</p>
+            </div>
+
+            <div class="card feature">
+                <h3>🌐 Multilingual Support</h3>
+                <p>Communicate fluently in dozens of languages with cultural awareness and nuanced understanding.</p>
+            </div>
+
+            <div class="card feature">
+                <h3>📝 Long-form Writing</h3>
+                <p>Create extensive documents, reports, articles, and creative writing with consistent quality and coherence.</p>
+            </div>
+        </div>
+
+        <!-- What's New Tab -->
+        <div class="content" id="new">
+            <div class="card new">
+                <h3>🚀 Extended Context Window</h3>
+                <p>Now supports 200K tokens (150K words) - nearly double the previous capacity. Work with longer documents and maintain context across extensive conversations.</p>
+            </div>
+
+            <div class="card new">
+                <h3>⚡ Faster Response Times</h3>
+                <p>Up to 40% faster generation speeds with improved streaming. Get answers and content more quickly without sacrificing quality.</p>
+            </div>
+
+            <div class="card new">
+                <h3>🎯 Improved Accuracy</h3>
+                <p>Enhanced factual accuracy and reduced hallucinations. More reliable responses across all domains with better source attribution.</p>
+            </div>
+
+            <div class="card new">
+                <h3>🔗 API Tool Use</h3>
+                <p>Native function calling and tool integration. Seamlessly connect Claude to external APIs, databases, and services.</p>
+            </div>
+
+            <div class="card new">
+                <h3>📊 Advanced Data Viz</h3>
+                <p>Create interactive charts, graphs, and visualizations directly in conversations. Support for complex datasets and custom styling.</p>
+            </div>
+
+            <div class="card new">
+                <h3>🎨 Style Customization</h3>
+                <p>Personalize Claude's communication style, tone, and formatting preferences to match your needs.</p>
+            </div>
+
+            <div class="card new">
+                <h3>🧩 Multi-step Reasoning</h3>
+                <p>Improved chain-of-thought processing for complex problems. Break down sophisticated tasks with better intermediate steps.</p>
+            </div>
+
+            <div class="card new">
+                <h3>💾 Conversation Memory</h3>
+                <p>Optional memory feature to remember context across conversations. Build on previous discussions for continuity.</p>
+            </div>
+        </div>
+
+        <!-- How to Use Tab -->
+        <div class="content" id="howto">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Start a Conversation</h4>
+                    <p>Simply type your question or request in natural language. Be specific about what you need.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>Upload Files (Optional)</h4>
+                    <p>Click the attachment icon to upload images, PDFs, or documents for Claude to analyze.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Enable Features</h4>
+                    <p>Turn on web search, code execution, or artifacts in settings based on your task needs.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>Iterate & Refine</h4>
+                    <p>Ask follow-up questions, request changes, or explore different approaches in the same conversation.</p>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 20px;">
+                <h3>💡 Pro Tips</h3>
+                <ul>
+                    <li>Be specific and detailed in your requests</li>
+                    <li>Provide examples of what you're looking for</li>
+                    <li>Break complex tasks into smaller steps</li>
+                    <li>Use follow-up questions to refine outputs</li>
+                    <li>Request specific formats (tables, lists, code)</li>
+                    <li>Ask Claude to "think step-by-step" for complex problems</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>🎯 Example Prompts</h3>
+                <div class="code-block">
+                    <code>"Analyze this sales data and create a visualization"</code>
+                </div>
+                <div class="code-block">
+                    <code>"Write a Python script to automate this task"</code>
+                </div>
+                <div class="code-block">
+                    <code>"Search for recent AI developments and summarize"</code>
+                </div>
+                <div class="code-block">
+                    <code>"Create an HTML landing page for my product"</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Use Cases Tab -->
+        <div class="content" id="usecases">
+            <h3 style="color: var(--success); margin-bottom: 15px; font-size: 1.1em;">💼 Business Scenarios</h3>
+            
+            <div class="card">
+                <h3>📊 Market Analysis</h3>
+                <p><strong>Task:</strong> Analyze competitor landscape and market trends</p>
+                <div class="code-block">
+                    <code>"Search for top 5 competitors in the electric vehicle market, analyze their Q4 2025 performance, and create a comparison table with market share, revenue, and key differentiators"</code>
+                </div>
+                <p><strong>Output:</strong> Comprehensive market report with web-sourced data, visualizations, and strategic insights</p>
+            </div>
+
+            <div class="card">
+                <h3>📝 Report Generation</h3>
+                <p><strong>Task:</strong> Create quarterly business reports</p>
+                <div class="code-block">
+                    <code>"Based on this sales data CSV, generate a Q4 executive summary with charts showing revenue trends, top products, regional performance, and recommendations"</code>
+                </div>
+                <p><strong>Output:</strong> Professional report artifact with data visualizations and actionable insights</p>
+            </div>
+
+            <div class="card">
+                <h3>✉️ Email Drafting</h3>
+                <p><strong>Task:</strong> Professional communication at scale</p>
+                <div class="code-block">
+                    <code>"Draft a professional email to our investors explaining the Q4 results, highlighting 23% revenue growth while addressing supply chain challenges. Tone: confident but transparent"</code>
+                </div>
+                <p><strong>Output:</strong> Polished, ready-to-send email with appropriate tone and structure</p>
+            </div>
+
+            <h3 style="color: var(--success); margin: 20px 0 15px 0; font-size: 1.1em;">🎓 Education Examples</h3>
+
+            <div class="card">
+                <h3>👨‍🏫 Personalized Tutoring</h3>
+                <p><strong>Task:</strong> Explain complex concepts with adaptive difficulty</p>
+                <div class="code-block">
+                    <code>"Explain quantum entanglement to me like I'm a high school student. Use analogies, then show me the actual physics equations, and give me 3 practice problems"</code>
+                </div>
+                <p><strong>Output:</strong> Multi-level explanation with examples, formulas, and exercises</p>
+            </div>
+
+            <div class="card">
+                <h3>🔬 Research Assistance</h3>
+                <p><strong>Task:</strong> Literature review and synthesis</p>
+                <div class="code-block">
+                    <code>"Search for recent papers on CRISPR gene therapy for sickle cell disease (2024-2026), summarize key findings, identify research gaps, and suggest future research directions"</code>
+                </div>
+                <p><strong>Output:</strong> Academic-quality literature review with citations</p>
+            </div>
+
+            <div class="card">
+                <h3>📚 Study Guide Creation</h3>
+                <p><strong>Task:</strong> Transform notes into learning materials</p>
+                <div class="code-block">
+                    <code>"Convert these lecture notes into a comprehensive study guide with key concepts, flashcard questions, practice problems, and a concept map"</code>
+                </div>
+                <p><strong>Output:</strong> Structured study materials optimized for learning</p>
+            </div>
+
+            <h3 style="color: var(--success); margin: 20px 0 15px 0; font-size: 1.1em;">🎨 Creative Work</h3>
+
+            <div class="card">
+                <h3>✍️ Content Creation</h3>
+                <p><strong>Task:</strong> Blog posts, articles, social media</p>
+                <div class="code-block">
+                    <code>"Write a 1500-word blog post about sustainable AI practices for tech companies. Include statistics, expert perspectives, and actionable steps. SEO keywords: green AI, sustainable computing"</code>
+                </div>
+                <p><strong>Output:</strong> Publication-ready article with proper structure and optimization</p>
+            </div>
+
+            <div class="card">
+                <h3>💡 Brainstorming Sessions</h3>
+                <p><strong>Task:</strong> Generate and refine creative ideas</p>
+                <div class="code-block">
+                    <code>"Brainstorm 20 unique mobile app ideas for remote workers. Focus on productivity and mental health. Then help me develop the top 3 into detailed concepts with features and monetization"</code>
+                </div>
+                <p><strong>Output:</strong> Diverse ideas with detailed development of best concepts</p>
+            </div>
+
+            <div class="card">
+                <h3>📖 Storytelling & Fiction</h3>
+                <p><strong>Task:</strong> Creative writing assistance</p>
+                <div class="code-block">
+                    <code>"Help me write a sci-fi short story about AI consciousness. Create character profiles, plot outline, and write the first chapter (2000 words). Genre: hard science fiction"</code>
+                </div>
+                <p><strong>Output:</strong> Complete narrative elements and polished prose</p>
+            </div>
+
+            <h3 style="color: var(--success); margin: 20px 0 15px 0; font-size: 1.1em;">⚙️ Technical Tasks</h3>
+
+            <div class="card">
+                <h3>🐛 Code Debugging</h3>
+                <p><strong>Task:</strong> Find and fix errors</p>
+                <div class="code-block">
+                    <code>"This Python script keeps throwing a KeyError. Here's the code: [paste code]. Debug it, explain what's wrong, fix it, and suggest improvements for error handling"</code>
+                </div>
+                <p><strong>Output:</strong> Detailed explanation, corrected code, and best practices</p>
+            </div>
+
+            <div class="card">
+                <h3>👀 Code Review</h3>
+                <p><strong>Task:</strong> Analyze code quality and security</p>
+                <div class="code-block">
+                    <code>"Review this API endpoint code for security vulnerabilities, performance issues, and code quality. Provide specific recommendations with code examples"</code>
+                </div>
+                <p><strong>Output:</strong> Comprehensive review with actionable improvements</p>
+            </div>
+
+            <div class="card">
+                <h3>🏗️ System Design</h3>
+                <p><strong>Task:</strong> Architecture planning</p>
+                <div class="code-block">
+                    <code>"Design a scalable microservices architecture for a real-time chat app with 1M users. Include database choices, caching strategy, and deployment diagram"</code>
+                </div>
+                <p><strong>Output:</strong> Complete system design with diagrams and justifications</p>
+            </div>
+
+            <h3 style="color: var(--success); margin: 20px 0 15px 0; font-size: 1.1em;">📈 Data Analysis</h3>
+
+            <div class="card">
+                <h3>📊 CSV Processing</h3>
+                <p><strong>Task:</strong> Clean and analyze datasets</p>
+                <div class="code-block">
+                    <code>"Analyze this customer data CSV: calculate churn rate, segment customers by behavior, identify trends, and create visualizations showing key insights"</code>
+                </div>
+                <p><strong>Output:</strong> Statistical analysis with charts and business insights</p>
+            </div>
+
+            <div class="card">
+                <h3>📉 Visualization Examples</h3>
+                <p><strong>Task:</strong> Interactive data dashboards</p>
+                <div class="code-block">
+                    <code>"Create an interactive HTML dashboard showing our sales data by region, product, and time. Include filters, hover tooltips, and export functionality"</code>
+                </div>
+                <p><strong>Output:</strong> Working dashboard artifact with full interactivity</p>
+            </div>
+
+            <div class="card">
+                <h3>🤖 Predictive Analysis</h3>
+                <p><strong>Task:</strong> ML-powered forecasting</p>
+                <div class="code-block">
+                    <code>"Using this historical sales data, build a time series forecast for next quarter. Explain the model, show accuracy metrics, and visualize predictions with confidence intervals"</code>
+                </div>
+                <p><strong>Output:</strong> Complete analysis with code, model explanation, and predictions</p>
+            </div>
+        </div>
+
+        <!-- Comparison Tab -->
+        <div class="content" id="comparison">
+            <div class="card" style="background: var(--gradient-1); color: white;">
+                <h3 style="color: white;">🏆 Model Comparison Overview</h3>
+                <p>Choose the right Claude model for your needs. Each model offers different trade-offs between intelligence, speed, and cost.</p>
+            </div>
+
+            <h3 style="color: var(--success); margin: 20px 0 15px 0; font-size: 1.1em;">Performance Comparison</h3>
+
+            <div class="card">
+                <h3>🥇 Claude Opus 4.6</h3>
+                <p><strong>Best For:</strong> Complex reasoning, research, creative writing, difficult problems</p>
+                <ul>
+                    <li><strong>Intelligence:</strong> ⭐⭐⭐⭐⭐ Highest (State-of-the-art)</li>
+                    <li><strong>Speed:</strong> ⭐⭐⭐ Moderate (3-5s typical response)</li>
+                    <li><strong>Context:</strong> 200K tokens</li>
+                    <li><strong>Cost:</strong> Premium pricing</li>
+                    <li><strong>Use When:</strong> Quality and accuracy are critical</li>
+                </ul>
+                <div class="code-block">
+                    <code>Model: claude-opus-4-6-20260115</code>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🥈 Claude Sonnet 4.5</h3>
+                <p><strong>Best For:</strong> Balanced tasks, everyday use, production applications</p>
+                <ul>
+                    <li><strong>Intelligence:</strong> ⭐⭐⭐⭐ Very High</li>
+                    <li><strong>Speed:</strong> ⭐⭐⭐⭐ Fast (1-2s typical response)</li>
+                    <li><strong>Context:</strong> 200K tokens</li>
+                    <li><strong>Cost:</strong> Mid-tier pricing</li>
+                    <li><strong>Use When:</strong> Need balance of quality and speed</li>
+                </ul>
+                <div class="code-block">
+                    <code>Model: claude-sonnet-4-5-20250929</code>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🥉 Claude Haiku 4.5</h3>
+                <p><strong>Best For:</strong> Simple tasks, high-volume processing, quick responses</p>
+                <ul>
+                    <li><strong>Intelligence:</strong> ⭐⭐⭐ Good</li>
+                    <li><strong>Speed:</strong> ⭐⭐⭐⭐⭐ Fastest (<1s typical response)</li>
+                    <li><strong>Context:</strong> 200K tokens</li>
+                    <li><strong>Cost:</strong> Most economical</li>
+                    <li><strong>Use When:</strong> Speed and cost matter most</li>
+                </ul>
+                <div class="code-block">
+                    <code>Model: claude-haiku-4-5-20251001</code>
+                </div>
+            </div>
+
+            <h3 style="color: var(--success); margin: 20px 0 15px 0; font-size: 1.1em;">⚖️ Speed vs Quality Trade-offs</h3>
+
+            <div class="card">
+                <h3>When to Choose Opus 4.6</h3>
+                <ul>
+                    <li>✅ Complex mathematical or scientific problems</li>
+                    <li>✅ Long-form creative writing (novels, screenplays)</li>
+                    <li>✅ Advanced code generation and architecture</li>
+                    <li>✅ Research synthesis and analysis</li>
+                    <li>✅ Critical business decisions</li>
+                    <li>✅ Nuanced reasoning and edge cases</li>
+                    <li>❌ Simple Q&A or factual lookups</li>
+                    <li>❌ High-volume batch processing</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>When to Choose Sonnet 4.5</h3>
+                <ul>
+                    <li>✅ Daily workflow automation</li>
+                    <li>✅ Code completion and debugging</li>
+                    <li>✅ Content editing and summarization</li>
+                    <li>✅ Customer support chatbots</li>
+                    <li>✅ Data analysis and visualization</li>
+                    <li>✅ Most business documents</li>
+                    <li>✅ 80% of general use cases</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>When to Choose Haiku 4.5</h3>
+                <ul>
+                    <li>✅ Real-time chat applications</li>
+                    <li>✅ Simple classification tasks</li>
+                    <li>✅ Quick translations</li>
+                    <li>✅ Data extraction from documents</li>
+                    <li>✅ Basic code suggestions</li>
+                    <li>✅ Processing thousands of requests</li>
+                    <li>✅ Cost-sensitive applications</li>
+                </ul>
+            </div>
+
+            <h3 style="color: var(--success); margin: 20px 0 15px 0; font-size: 1.1em;">📋 Feature Availability Matrix</h3>
+
+            <div class="card">
+                <h3>Feature Comparison Table</h3>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; font-size: 0.8em; margin-top: 10px;">
+                        <thead style="background: var(--secondary);">
+                            <tr>
+                                <th style="padding: 8px; text-align: left;">Feature</th>
+                                <th style="padding: 8px; text-align: center;">Opus 4.6</th>
+                                <th style="padding: 8px; text-align: center;">Sonnet 4.5</th>
+                                <th style="padding: 8px; text-align: center;">Haiku 4.5</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--accent);">
+                                <td style="padding: 8px;">Context Window</td>
+                                <td style="padding: 8px; text-align: center;">200K</td>
+                                <td style="padding: 8px; text-align: center;">200K</td>
+                                <td style="padding: 8px; text-align: center;">200K</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--accent);">
+                                <td style="padding: 8px;">Vision (Images)</td>
+                                <td style="padding: 8px; text-align: center;">✅</td>
+                                <td style="padding: 8px; text-align: center;">✅</td>
+                                <td style="padding: 8px; text-align: center;">✅</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--accent);">
+                                <td style="padding: 8px;">Tool Use / Functions</td>
+                                <td style="padding: 8px; text-align: center;">✅</td>
+                                <td style="padding: 8px; text-align: center;">✅</td>
+                                <td style="padding: 8px; text-align: center;">✅</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--accent);">
+                                <td style="padding: 8px;">Web Search</td>
+                                <td style="padding: 8px; text-align: center;">✅</td>
+                                <td style="padding: 8px; text-align: center;">✅</td>
+                                <td style="padding: 8px; text-align: center;">✅</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--accent);">
+                                <td style="padding: 8px;">Code Execution</td>
+                                <td style="padding: 8px; text-align: center;">✅</td>
+                                <td style="padding: 8px; text-align: center;">✅</td>
+                                <td style="padding: 8px; text-align: center;">✅</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--accent);">
+                                <td style="padding: 8px;">Artifacts</td>
+                                <td style="padding: 8px; text-align: center;">✅</td>
+                                <td style="padding: 8px; text-align: center;">✅</td>
+                                <td style="padding: 8px; text-align: center;">✅</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--accent);">
+                                <td style="padding: 8px;">Streaming</td>
+                                <td style="padding: 8px; text-align: center;">✅</td>
+                                <td style="padding: 8px; text-align: center;">✅</td>
+                                <td style="padding: 8px; text-align: center;">✅</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--accent);">
+                                <td style="padding: 8px;">Complex Reasoning</td>
+                                <td style="padding: 8px; text-align: center;">⭐⭐⭐⭐⭐</td>
+                                <td style="padding: 8px; text-align: center;">⭐⭐⭐⭐</td>
+                                <td style="padding: 8px; text-align: center;">⭐⭐⭐</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--accent);">
+                                <td style="padding: 8px;">Creative Writing</td>
+                                <td style="padding: 8px; text-align: center;">⭐⭐⭐⭐⭐</td>
+                                <td style="padding: 8px; text-align: center;">⭐⭐⭐⭐</td>
+                                <td style="padding: 8px; text-align: center;">⭐⭐⭐</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--accent);">
+                                <td style="padding: 8px;">Code Generation</td>
+                                <td style="padding: 8px; text-align: center;">⭐⭐⭐⭐⭐</td>
+                                <td style="padding: 8px; text-align: center;">⭐⭐⭐⭐</td>
+                                <td style="padding: 8px; text-align: center;">⭐⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px;">Response Speed</td>
+                                <td style="padding: 8px; text-align: center;">3-5s</td>
+                                <td style="padding: 8px; text-align: center;">1-2s</td>
+                                <td style="padding: 8px; text-align: center;"><1s</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card" style="background: var(--gradient-2); color: white; margin-top: 15px;">
+                <h3 style="color: white;">💡 Pro Tip</h3>
+                <p>Start with Sonnet 4.5 for most tasks. Upgrade to Opus 4.6 when you need maximum quality or hit limitations. Use Haiku 4.5 for high-volume, time-sensitive operations.</p>
+            </div>
+
+            <div class="card">
+                <h3>🔄 Switching Between Models</h3>
+                <p>In claude.ai, you can switch models mid-conversation:</p>
+                <ul>
+                    <li>Click the model selector in the top bar</li>
+                    <li>Choose your preferred model</li>
+                    <li>Continue the conversation seamlessly</li>
+                    <li>Previous context is maintained</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Troubleshooting Tab -->
+        <div class="content" id="troubleshoot">
+            <div class="card" style="background: var(--gradient-1); color: white;">
+                <h3 style="color: white;">🔧 Troubleshooting Guide</h3>
+                <p>Solutions to common issues and ways to get better responses from Claude Opus 4.6</p>
+            </div>
+
+            <h3 style="color: var(--success); margin: 20px 0 15px 0; font-size: 1.1em;">❗ Common Error Messages</h3>
+
+            <div class="card">
+                <h3>⚠️ "Error: Rate Limit Exceeded"</h3>
+                <p><strong>Cause:</strong> Too many requests in a short time period</p>
+                <p><strong>Solutions:</strong></p>
+                <ul>
+                    <li>Wait 60 seconds before sending another message</li>
+                    <li>Upgrade to Claude Pro for higher rate limits</li>
+                    <li>Combine multiple questions into one message</li>
+                    <li>For API users: implement exponential backoff</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>⚠️ "Context Length Exceeded"</h3>
+                <p><strong>Cause:</strong> Conversation or input exceeds 200K token limit</p>
+                <p><strong>Solutions:</strong></p>
+                <ul>
+                    <li>Start a new conversation to clear context</li>
+                    <li>Summarize previous discussion and continue</li>
+                    <li>Break large documents into smaller chunks</li>
+                    <li>Remove unnecessary uploaded files</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>⚠️ "File Upload Failed"</h3>
+                <p><strong>Cause:</strong> File size too large or unsupported format</p>
+                <p><strong>Solutions:</strong></p>
+                <ul>
+                    <li>Compress large files (limit: 10MB per file)</li>
+                    <li>Convert to supported formats (PDF, TXT, DOCX, images)</li>
+                    <li>Split large files into smaller parts</li>
+                    <li>Use image compression for screenshots</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>⚠️ "Code Execution Timeout"</h3>
+                <p><strong>Cause:</strong> Code took too long to run (>60 seconds)</p>
+                <p><strong>Solutions:</strong></p>
+                <ul>
+                    <li>Optimize code for better performance</li>
+                    <li>Process data in smaller batches</li>
+                    <li>Avoid infinite loops or heavy computations</li>
+                    <li>Request code without execution for complex tasks</li>
+                </ul>
+            </div>
+
+            <h3 style="color: var(--success); margin: 20px 0 15px 0; font-size: 1.1em;">❓ Frequently Asked Questions</h3>
+
+            <div class="accordion">
+                <div class="accordion-header">Why did Claude refuse my request?</div>
+                <div class="accordion-content">
+                    <p><strong>Common Reasons:</strong></p>
+                    <ul>
+                        <li><strong>Safety:</strong> Request involved harmful content, malware, or illegal activities</li>
+                        <li><strong>Privacy:</strong> Asked to identify people from photos without consent</li>
+                        <li><strong>Copyright:</strong> Requested copyrighted material (song lyrics, books)</li>
+                        <li><strong>Uncertainty:</strong> Claude wasn't confident it could help accurately</li>
+                    </ul>
+                    <p><strong>What to do:</strong> Rephrase your request, explain your legitimate use case, or ask for alternatives Claude can provide.</p>
+                </div>
+            </div>
+
+            <div class="accordion">
+                <div class="accordion-header">How can I improve Claude's responses?</div>
+                <div class="accordion-content">
+                    <p><strong>Better Prompting Techniques:</strong></p>
+                    <ul>
+                        <li>Be specific about format, length, and style</li>
+                        <li>Provide examples of what you want</li>
+                        <li>Break complex tasks into steps</li>
+                        <li>Ask Claude to "think step-by-step"</li>
+                        <li>Specify tone (professional, casual, technical)</li>
+                        <li>Give context about your audience or purpose</li>
+                        <li>Request revisions with specific feedback</li>
+                    </ul>
+                    <div class="code-block">
+                        <code>"Explain quantum computing for a business executive (non-technical). Use analogies, keep it under 200 words, focus on practical applications."</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion">
+                <div class="accordion-header">Why are responses sometimes inconsistent?</div>
+                <div class="accordion-content">
+                    <p>AI models can produce varied outputs. To get more consistent results:</p>
+                    <ul>
+                        <li>Use temperature setting 0.0 (API only) for deterministic output</li>
+                        <li>Provide detailed constraints and requirements</li>
+                        <li>Use the same conversation thread for related tasks</li>
+                        <li>Request specific formats (JSON, tables, lists)</li>
+                        <li>Give examples of desired output style</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion">
+                <div class="accordion-header">Why can't Claude access certain websites?</div>
+                <div class="accordion-content">
+                    <p>Web search has limitations:</p>
+                    <ul>
+                        <li>No access to paywalled content (NYT subscriptions, etc.)</li>
+                        <li>Can't bypass login-required pages</li>
+                        <li>Some sites block automated access</li>
+                        <li>Real-time data may have slight delays</li>
+                    </ul>
+                    <p><strong>Alternative:</strong> Copy and paste content directly into the conversation or upload as a file.</p>
+                </div>
+            </div>
+
+            <h3 style="color: var(--success); margin: 20px 0 15px 0; font-size: 1.1em;">⚡ Performance Issues & Solutions</h3>
+
+            <div class="card">
+                <h3>🐌 Slow Response Times</h3>
+                <p><strong>Possible Causes & Fixes:</strong></p>
+                <ul>
+                    <li><strong>Long prompts:</strong> Claude processes entire context - be concise</li>
+                    <li><strong>Heavy computation:</strong> Complex code execution takes time</li>
+                    <li><strong>Web search:</strong> Searching multiple sources adds latency</li>
+                    <li><strong>Peak hours:</strong> Try during off-peak times</li>
+                    <li><strong>Solution:</strong> Switch to Sonnet 4.5 or Haiku 4.5 for faster responses</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>🔄 Claude Seems to Forget Context</h3>
+                <p><strong>Solutions:</strong></p>
+                <ul>
+                    <li>Explicitly reference earlier parts: "As we discussed earlier..."</li>
+                    <li>Summarize key points before asking follow-ups</li>
+                    <li>Use artifacts for important information you'll reference</li>
+                    <li>Enable conversation memory in settings</li>
+                    <li>Keep critical info in the recent messages</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>📊 Visualizations Not Rendering</h3>
+                <p><strong>Troubleshooting:</strong></p>
+                <ul>
+                    <li>Ensure artifacts feature is enabled in settings</li>
+                    <li>Refresh the page if visualization appears blank</li>
+                    <li>Try different chart library (Chart.js, Plotly, Recharts)</li>
+                    <li>Check browser console for JavaScript errors</li>
+                    <li>Request HTML artifact instead of React if issues persist</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>💾 Lost Work or Conversation</h3>
+                <p><strong>Prevention & Recovery:</strong></p>
+                <ul>
+                    <li>Important work: Download artifacts immediately</li>
+                    <li>Enable "Search past chats" to find old conversations</li>
+                    <li>Use Projects feature for ongoing work</li>
+                    <li>Copy critical responses to external storage</li>
+                    <li>Browser crash: Check conversation history after restart</li>
+                </ul>
+            </div>
+
+            <div class="card" style="background: var(--gradient-3); color: white; margin-top: 15px;">
+                <h3 style="color: white;">💡 Still Having Issues?</h3>
+                <p>Use the thumbs down button on any response to report problems to Anthropic. Include specific details about what went wrong for faster resolution.</p>
+            </div>
+        </div>
+
+        <!-- Integrations Tab -->
+        <div class="content" id="integrations">
+            <div class="card" style="background: var(--gradient-1); color: white;">
+                <h3 style="color: white;">🔗 Integration Guide</h3>
+                <p>Connect Claude Opus 4.6 with your favorite tools and workflows</p>
+            </div>
+
+            <h3 style="color: var(--success); margin: 20px 0 15px 0; font-size: 1.1em;">📄 Google Workspace Integration</h3>
+
+            <div class="card">
+                <h3>Google Docs Integration</h3>
+                <p><strong>How to Use:</strong></p>
+                <ul>
+                    <li><strong>Upload & Edit:</strong> Upload .docx files to Claude, get edits, download as .docx</li>
+                    <li><strong>Content Generation:</strong> Ask Claude to create documents, export to Google Docs</li>
+                    <li><strong>Proofreading:</strong> Copy text from Docs, paste to Claude, get corrections</li>
+                    <li><strong>Formatting:</strong> Request Claude to add headers, tables, bullet points</li>
+                </ul>
+                <div class="code-block">
+                    <code>"Review this draft and improve clarity, fix grammar, and add section headers. Format as a professional business proposal."</code>
+                </div>
+                <p><strong>Workflow:</strong> Draft in Docs → Paste to Claude → Get improvements → Copy back to Docs</p>
+            </div>
+
+            <div class="card">
+                <h3>Google Sheets Integration</h3>
+                <p><strong>How to Use:</strong></p>
+                <ul>
+                    <li><strong>Data Analysis:</strong> Upload CSV/Excel files for analysis and insights</li>
+                    <li><strong>Formula Generation:</strong> Describe what you need, get exact formulas</li>
+                    <li><strong>Data Cleaning:</strong> Fix messy data, remove duplicates, standardize formats</li>
+                    <li><strong>Visualization:</strong> Create charts from your spreadsheet data</li>
+                </ul>
+                <div class="code-block">
+                    <code>"Create a Google Sheets formula that calculates the average sales for each region, excluding values below $1000"</code>
+                </div>
+                <p><strong>Pro Tip:</strong> Export Claude's analysis as CSV to import directly into Sheets</p>
+            </div>
+
+            <div class="card">
+                <h3>Gmail Assistance</h3>
+                <p><strong>Use Cases:</strong></p>
+                <ul>
+                    <li>Draft professional emails with specific tone</li>
+                    <li>Summarize long email threads</li>
+                    <li>Generate response templates</li>
+                    <li>Translate emails to other languages</li>
+                    <li>Proofread before sending</li>
+                </ul>
+                <p><strong>Workflow:</strong> Describe email context → Claude drafts → Copy to Gmail</p>
+            </div>
+
+            <h3 style="color: var(--success); margin: 20px 0 15px 0; font-size: 1.1em;">💬 Slack Integration</h3>
+
+            <div class="card">
+                <h3>Claude for Slack (Teams)</h3>
+                <p><strong>Features:</strong></p>
+                <ul>
+                    <li>Add Claude bot to Slack workspace (Team plan required)</li>
+                    <li>Ask questions directly in Slack channels</li>
+                    <li>Summarize threads and conversations</li>
+                    <li>Generate responses to messages</li>
+                    <li>Quick fact-checking and research</li>
+                </ul>
+                <p><strong>Setup:</strong> Workspace admin installs Claude app from Slack App Directory</p>
+            </div>
+
+            <div class="card">
+                <h3>Slack Workflow Automation</h3>
+                <p><strong>Manual Integration Ideas:</strong></p>
+                <ul>
+                    <li><strong>Message Drafting:</strong> Copy Slack context → Ask Claude → Paste response</li>
+                    <li><strong>Meeting Notes:</strong> Share transcript with Claude for summaries</li>
+                    <li><strong>Documentation:</strong> Generate wiki pages from Slack discussions</li>
+                    <li><strong>Onboarding:</strong> Create FAQ responses from common questions</li>
+                </ul>
+                <div class="code-block">
+                    <code>"Summarize this Slack thread and create action items with owners and deadlines"</code>
+                </div>
+            </div>
+
+            <h3 style="color: var(--success); margin: 20px 0 15px 0; font-size: 1.1em;">💻 VS Code / IDE Usage</h3>
+
+            <div class="card">
+                <h3>VS Code Integration</h3>
+                <p><strong>Methods:</strong></p>
+                <ul>
+                    <li><strong>Claude Code CLI:</strong> Terminal tool for agentic coding tasks</li>
+                    <li><strong>API Integration:</strong> Use Anthropic API in your extensions</li>
+                    <li><strong>Copy-Paste Workflow:</strong> Share code snippets with Claude web</li>
+                    <li><strong>Claude Desktop App:</strong> Side-by-side coding assistance</li>
+                </ul>
+                <p><strong>Install Claude Code:</strong></p>
+                <div class="code-block">
+                    <code>npm install -g @anthropic-ai/claude-code</code>
+                </div>
+                <p>Requires Node.js 18+ and API key</p>
+            </div>
+
+            <div class="card">
+                <h3>Development Workflows</h3>
+                <p><strong>Common Use Cases:</strong></p>
+                <ul>
+                    <li><strong>Code Review:</strong> Paste functions for security/quality analysis</li>
+                    <li><strong>Debugging:</strong> Share error messages and stack traces</li>
+                    <li><strong>Refactoring:</strong> Get optimization suggestions</li>
+                    <li><strong>Documentation:</strong> Generate docstrings and README files</li>
+                    <li><strong>Testing:</strong> Create unit tests for your code</li>
+                    <li><strong>Architecture:</strong> Design system components and APIs</li>
+                </ul>
+                <div class="code-block">
+                    <code>"Review this Python function for edge cases, add type hints, and write pytest unit tests"</code>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>JetBrains IDEs (IntelliJ, PyCharm)</h3>
+                <p><strong>Integration Options:</strong></p>
+                <ul>
+                    <li>Use Claude API in custom plugins</li>
+                    <li>Claude Desktop app for side-by-side assistance</li>
+                    <li>Browser extension for quick access</li>
+                    <li>Copy-paste code for analysis and generation</li>
+                </ul>
+            </div>
+
+            <h3 style="color: var(--success); margin: 20px 0 15px 0; font-size: 1.1em;">📱 Mobile App Features</h3>
+
+            <div class="card">
+                <h3>Claude Mobile (iOS & Android)</h3>
+                <p><strong>Key Features:</strong></p>
+                <ul>
+                    <li><strong>Voice Input:</strong> Speak your questions naturally</li>
+                    <li><strong>Camera Integration:</strong> Take photos and ask about them</li>
+                    <li><strong>Photo Upload:</strong> Analyze images from your gallery</li>
+                    <li><strong>Sync Conversations:</strong> Access chats across all devices</li>
+                    <li><strong>Offline Access:</strong> View previous conversations without internet</li>
+                    <li><strong>Share Extension:</strong> Send content to Claude from other apps</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Mobile-Specific Use Cases</h3>
+                <p><strong>On-the-Go Scenarios:</strong></p>
+                <ul>
+                    <li><strong>Shopping:</strong> Photo of product → Ask for reviews/comparisons</li>
+                    <li><strong>Travel:</strong> Screenshot of menu → Get translations</li>
+                    <li><strong>Learning:</strong> Photo of textbook page → Get explanations</li>
+                    <li><strong>Work:</strong> Photo of whiteboard → Convert to digital notes</li>
+                    <li><strong>Documents:</strong> Scan receipts/forms → Extract data</li>
+                </ul>
+                <div class="code-block">
+                    <code>"[Photo of restaurant menu] Translate this to English and recommend 3 vegetarian dishes"</code>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Quick Actions on Mobile</h3>
+                <p><strong>Shortcuts & Widgets:</strong></p>
+                <ul>
+                    <li>Add Claude to home screen for quick access</li>
+                    <li>Use Siri/Google Assistant to open Claude</li>
+                    <li>Create iOS Shortcuts for common prompts</li>
+                    <li>Share from any app directly to Claude</li>
+                </ul>
+            </div>
+
+            <div class="card" style="background: var(--gradient-2); color: white; margin-top: 15px;">
+                <h3 style="color: white;">🚀 Coming Soon</h3>
+                <p>Native integrations with Notion, Microsoft 365, Figma, and more are in development. Check claude.ai for updates!</p>
+            </div>
+        </div>
+
+        <!-- Pro Tips Tab -->
+        <div class="content" id="tips">
+            <div class="card" style="background: var(--gradient-1); color: white;">
+                <h3 style="color: white;">⚡ Productivity Power-Ups</h3>
+                <p>Advanced tips and shortcuts to become a Claude power user</p>
+            </div>
+
+            <h3 style="color: var(--success); margin: 20px 0 15px 0; font-size: 1.1em;">⌨️ Keyboard Shortcuts</h3>
+
+            <div class="card">
+                <h3>Essential Shortcuts</h3>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; font-size: 0.85em; margin-top: 10px;">
+                        <thead style="background: var(--secondary);">
+                            <tr>
+                                <th style="padding: 8px; text-align: left;">Action</th>
+                                <th style="padding: 8px; text-align: left;">Mac</th>
+                                <th style="padding: 8px; text-align: left;">Windows/Linux</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--accent);">
+                                <td style="padding: 8px;">New conversation</td>
+                                <td style="padding: 8px;"><code>⌘ + K</code></td>
+                                <td style="padding: 8px;"><code>Ctrl + K</code></td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--accent);">
+                                <td style="padding: 8px;">Send message</td>
+                                <td style="padding: 8px;"><code>⌘ + Enter</code></td>
+                                <td style="padding: 8px;"><code>Ctrl + Enter</code></td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--accent);">
+                                <td style="padding: 8px;">New line (no send)</td>
+                                <td style="padding: 8px;"><code>Shift + Enter</code></td>
+                                <td style="padding: 8px;"><code>Shift + Enter</code></td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--accent);">
+                                <td style="padding: 8px;">Focus input</td>
+                                <td style="padding: 8px;"><code>⌘ + /</code></td>
+                                <td style="padding: 8px;"><code>Ctrl + /</code></td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--accent);">
+                                <td style="padding: 8px;">Copy code block</td>
+                                <td style="padding: 8px;">Click copy icon</td>
+                                <td style="padding: 8px;">Click copy icon</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--accent);">
+                                <td style="padding: 8px;">Regenerate response</td>
+                                <td style="padding: 8px;">Click regenerate</td>
+                                <td style="padding: 8px;">Click regenerate</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px;">Open settings</td>
+                                <td style="padding: 8px;"><code>⌘ + ,</code></td>
+                                <td style="padding: 8px;"><code>Ctrl + ,</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <h3 style="color: var(--success); margin: 20px 0 15px 0; font-size: 1.1em;">🚀 Quick Commands</h3>
+
+            <div class="card">
+                <h3>Speed Prompt Patterns</h3>
+                <p>Use these prefixes for faster, better results:</p>
+                <ul>
+                    <li><strong>"TL;DR:"</strong> Quick summaries → "TL;DR: [paste article]"</li>
+                    <li><strong>"ELI5:"</strong> Simple explanations → "ELI5: quantum computing"</li>
+                    <li><strong>"Step-by-step:"</strong> Detailed guides → "Step-by-step: set up Python environment"</li>
+                    <li><strong>"Compare:"</strong> Side-by-side analysis → "Compare: React vs Vue"</li>
+                    <li><strong>"Proofread:"</strong> Grammar check → "Proofread: [your text]"</li>
+                    <li><strong>"Translate to [lang]:"</strong> Language conversion → "Translate to Spanish: [text]"</li>
+                    <li><strong>"Brainstorm:"</strong> Idea generation → "Brainstorm: marketing campaign ideas"</li>
+                    <li><strong>"Debug:"</strong> Fix code → "Debug: [paste error and code]"</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Power User Commands</h3>
+                <div class="code-block">
+                    <code>"Think step-by-step" → Forces methodical reasoning</code>
+                </div>
+                <div class="code-block">
+                    <code>"Show your work" → Get intermediate calculations</code>
+                </div>
+                <div class="code-block">
+                    <code>"In JSON format" → Structured output</code>
+                </div>
+                <div class="code-block">
+                    <code>"As a table" → Organized comparisons</code>
+                </div>
+                <div class="code-block">
+                    <code>"Continue from where you left off" → Extend long responses</code>
+                </div>
+            </div>
+
+            <h3 style="color: var(--success); margin: 20px 0 15px 0; font-size: 1.1em;">📋 Workflow Templates</h3>
+
+            <div class="card">
+                <h3>🔬 Research Workflow</h3>
+                <p><strong>Steps:</strong></p>
+                <ol style="margin-left: 20px; font-size: 0.85em;">
+                    <li>Ask Claude to search for recent sources on topic</li>
+                    <li>Request summary of key findings</li>
+                    <li>Ask for critical analysis and gaps</li>
+                    <li>Generate bibliography in required format</li>
+                    <li>Create final report with citations</li>
+                </ol>
+                <div class="code-block">
+                    <code>Template: "Search for research on [topic] from 2024-2026. Summarize 5 key findings, identify controversies, cite sources in APA format."</code>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>✍️ Content Creation Workflow</h3>
+                <ol style="margin-left: 20px; font-size: 0.85em;">
+                    <li>Brainstorm 10-20 topic ideas</li>
+                    <li>Choose best 3, expand into outlines</li>
+                    <li>Write first draft for selected topic</li>
+                    <li>Request edits for clarity and engagement</li>
+                    <li>Optimize for SEO (keywords, meta description)</li>
+                    <li>Generate social media posts to promote</li>
+                </ol>
+            </div>
+
+            <div class="card">
+                <h3>💻 Coding Workflow</h3>
+                <ol style="margin-left: 20px; font-size: 0.85em;">
+                    <li>Describe feature requirements in detail</li>
+                    <li>Ask for architecture/design recommendations</li>
+                    <li>Request implementation with comments</li>
+                    <li>Generate unit tests (80%+ coverage)</li>
+                    <li>Review for security vulnerabilities</li>
+                    <li>Create documentation and README</li>
+                </ol>
+            </div>
+
+            <div class="card">
+                <h3>📊 Data Analysis Workflow</h3>
+                <ol style="margin-left: 20px; font-size: 0.85em;">
+                    <li>Upload CSV/Excel file</li>
+                    <li>Request data quality check and cleaning</li>
+                    <li>Ask for exploratory analysis and insights</li>
+                    <li>Generate specific visualizations</li>
+                    <li>Request statistical analysis (correlations, trends)</li>
+                    <li>Create executive summary with recommendations</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--success); margin: 20px 0 15px 0; font-size: 1.1em;">🎯 Power User Tricks</h3>
+
+            <div class="card">
+                <h3>🔄 Iterative Refinement</h3>
+                <p>Don't accept first response - iterate to perfection:</p>
+                <ul>
+                    <li>"Make it more concise" → Reduces verbosity</li>
+                    <li>"Add more technical detail" → Increases depth</li>
+                    <li>"Use simpler language" → Improves accessibility</li>
+                    <li>"Add specific examples" → Makes it concrete</li>
+                    <li>"Change tone to [formal/casual/enthusiastic]" → Adjusts voice</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>🎭 Role Assignment</h3>
+                <p>Ask Claude to adopt specific perspectives:</p>
+                <div class="code-block">
+                    <code>"Act as a senior software architect and review this system design"</code>
+                </div>
+                <div class="code-block">
+                    <code>"You're a marketing expert. Critique this campaign."</code>
+                </div>
+                <div class="code-block">
+                    <code>"As a teacher, explain this concept to a 10-year-old"</code>
+                </div>
+                <p>This helps Claude tailor expertise and perspective.</p>
+            </div>
+
+            <div class="card">
+                <h3>📝 Conversation Management</h3>
+                <p><strong>Smart Strategies:</strong></p>
+                <ul>
+                    <li><strong>Projects:</strong> Group related conversations together</li>
+                    <li><strong>Naming:</strong> Give conversations descriptive titles for search</li>
+                    <li><strong>Context Loading:</strong> Start with "Previously we discussed..." to remind Claude</li>
+                    <li><strong>Artifacts:</strong> Save important outputs as artifacts for reference</li>
+                    <li><strong>Memory:</strong> Enable in settings to build long-term context</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>🎨 Artifact Hacks</h3>
+                <p><strong>Advanced Artifact Tricks:</strong></p>
+                <ul>
+                    <li>Request "interactive HTML artifact" for custom tools</li>
+                    <li>Ask for "React component with Tailwind" for modern UIs</li>
+                    <li>Use "Mermaid diagram" for flowcharts and visualizations</li>
+                    <li>Request "downloadable CSV" for data exports</li>
+                    <li>Ask Claude to "update the artifact" to iterate on existing work</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>⚡ Batch Processing</h3>
+                <p>Process multiple items efficiently:</p>
+                <div class="code-block">
+                    <code>"For each of these 5 products: [list], generate a description, price recommendation, and target audience"</code>
+                </div>
+                <p>Claude can handle lists, tables, and structured batches in one go.</p>
+            </div>
+
+            <div class="card">
+                <h3>🔍 Advanced Search Techniques</h3>
+                <p><strong>Get Better Search Results:</strong></p>
+                <ul>
+                    <li>"Search for academic papers on [topic]" → Scholarly focus</li>
+                    <li>"Find news from the past week about [topic]" → Recent only</li>
+                    <li>"Search government sources for [topic]" → Official data</li>
+                    <li>"Compare how NYT vs WSJ covered [event]" → Multiple perspectives</li>
+                </ul>
+            </div>
+
+            <div class="card" style="background: var(--gradient-3); color: white;">
+                <h3 style="color: white;">🏆 Pro Tip: Chain of Thought</h3>
+                <p>For complex problems, ask Claude to show its reasoning: "Explain your thought process step-by-step before giving the final answer." This dramatically improves accuracy on difficult tasks!</p>
+            </div>
+
+            <div class="card">
+                <h3>📌 Save These Prompt Templates</h3>
+                <p><strong>Copy to your notes:</strong></p>
+                <div class="code-block">
+                    <code>Research: "Search for [topic], summarize findings, cite sources"</code>
+                </div>
+                <div class="code-block">
+                    <code>Writing: "Write [type] about [topic], [length], tone: [style]"</code>
+                </div>
+                <div class="code-block">
+                    <code>Code: "Create [language] [feature] with error handling and tests"</code>
+                </div>
+                <div class="code-block">
+                    <code>Analysis: "Analyze [data], find insights, create visualizations"</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Tab -->
+        <div class="content" id="advanced">
+            <div class="accordion">
+                <div class="accordion-header">API Integration<span class="badge">Developers</span></div>
+                <div class="accordion-content">
+                    <p>Access Claude Opus 4.6 via API:</p>
+                    <div class="code-block">
+                        <code>
+Model: claude-opus-4-6-20260115<br>
+Endpoint: api.anthropic.com/v1/messages<br>
+Max tokens: 200,000 input / 16,000 output
+                        </code>
+                    </div>
+                    <p>Features: Streaming, tool use, vision, multi-turn conversations</p>
+                </div>
+            </div>
+
+            <div class="accordion">
+                <div class="accordion-header">Prompt Engineering</div>
+                <div class="accordion-content">
+                    <p><strong>Best Practices:</strong></p>
+                    <ul>
+                        <li>Use clear, structured prompts</li>
+                        <li>Provide context and constraints</li>
+                        <li>Request specific output formats</li>
+                        <li>Use XML tags for complex instructions</li>
+                        <li>Include positive and negative examples</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion">
+                <div class="accordion-header">Performance Optimization</div>
+                <div class="accordion-content">
+                    <p><strong>Get Better Results:</strong></p>
+                    <ul>
+                        <li>Front-load important information</li>
+                        <li>Use temperature settings (0.0-1.0)</li>
+                        <li>Implement chain-of-thought prompting</li>
+                        <li>Break large tasks into subtasks</li>
+                        <li>Leverage system prompts effectively</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion">
+                <div class="accordion-header">Tool Use & Functions</div>
+                <div class="accordion-content">
+                    <p>Claude can call external tools and functions:</p>
+                    <ul>
+                        <li>Web search and browsing</li>
+                        <li>Calculator and math tools</li>
+                        <li>Code interpreters</li>
+                        <li>Database queries</li>
+                        <li>Custom API integrations</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion">
+                <div class="accordion-header">Safety & Limitations</div>
+                <div class="accordion-content">
+                    <p><strong>What Claude Won't Do:</strong></p>
+                    <ul>
+                        <li>Provide harmful or dangerous content</li>
+                        <li>Impersonate individuals</li>
+                        <li>Generate misleading information intentionally</li>
+                        <li>Assist with illegal activities</li>
+                        <li>Process sensitive personal data without consent</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 15px;">
+                <h3>🔒 Privacy & Security</h3>
+                <p>Your conversations with Claude are encrypted and not used to train models. You maintain control over your data and can delete conversations at any time.</p>
+            </div>
+        </div>
+
+        <footer>
+            <p>Claude Opus 4.6 Guide 2026 | Anthropic PBC</p>
+            <p style="margin-top: 5px; font-size: 0.9em;">For latest documentation visit docs.anthropic.com</p>
+        </footer>
+    </div>
+
+    <script>
+        // Tab switching
+        const tabs = document.querySelectorAll('.tab');
+        const contents = document.querySelectorAll('.content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.getAttribute('data-tab');
+                
+                tabs.forEach(t => t.classList.remove('active'));
+                contents.forEach(c => c.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(targetTab).classList.add('active');
+            });
+        });
+
+        // Accordion functionality
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+        
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling;
+                const isActive = header.classList.contains('active');
+                
+                // Close all accordions
+                accordionHeaders.forEach(h => {
+                    h.classList.remove('active');
+                    h.nextElementSibling.classList.remove('active');
+                });
+                
+                // Open clicked accordion if it wasn't active
+                if (!isActive) {
+                    header.classList.add('active');
+                    content.classList.add('active');
+                }
+            });
+        });
+
+        // Add touch feedback for mobile
+        document.querySelectorAll('.card, .feature-box, .tab').forEach(element => {
+            element.addEventListener('touchstart', function() {
+                this.style.opacity = '0.8';
+            });
+            element.addEventListener('touchend', function() {
+                this.style.opacity = '1';
+            });
+        });
+
+        // Prevent pull-to-refresh
+        let startY = 0;
+        document.addEventListener('touchstart', e => {
+            startY = e.touches[0].pageY;
+        });
+        
+        document.addEventListener('touchmove', e => {
+            const y = e.touches[0].pageY;
+            if (y > startY && window.scrollY === 0) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    </script>
+</body>
+</html>
